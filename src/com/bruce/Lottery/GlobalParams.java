@@ -1,0 +1,17 @@
+package com.bruce.Lottery;
+
+/**
+ * Created by Bruce
+ * Data 2014/8/8
+ * Time 17:01.
+ */
+public class GlobalParams {
+    /**
+     * 代理的ip
+     */
+    public static String PROXY="";
+    /**
+     * 代理的端口
+     */
+    public static int PORT=0;
+}

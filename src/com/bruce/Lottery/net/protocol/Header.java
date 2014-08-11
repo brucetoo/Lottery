@@ -97,4 +97,13 @@ public class Header {
         return username;
     }
 
+
+    /************************处理服务端回复*******************************/
+    public Leaf getTimestamp() {
+        return timestamp;
+    }
+
+    public Leaf getDigest() {
+        return digest;
+    }
 }

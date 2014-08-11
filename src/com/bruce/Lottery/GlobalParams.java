@@ -4,6 +4,7 @@ package com.bruce.Lottery;
  * Created by Bruce
  * Data 2014/8/8
  * Time 17:01.
+ * 全局的变量
  */
 public class GlobalParams {
     /**

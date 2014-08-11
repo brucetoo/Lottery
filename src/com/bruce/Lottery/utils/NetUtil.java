@@ -52,7 +52,7 @@ public class NetUtil {
         Uri PREFERRED_APN_URI = Uri.parse("content://telephony/carriers/preferapn");//4.0模拟器屏蔽掉该权限
         ContentResolver resolver = context.getContentResolver();
         Cursor cursor = resolver.query(PREFERRED_APN_URI, null, null, null, null);
-        if(cursor!=null&&cursor.moveToNext()){
+        if(cursor!=null&&cursor.moveToFirst()){
             //获取ＡＰＮ代理值和端口
            GlobalParams.PROXY = cursor.getString(cursor.getColumnIndex("proxy"));
            GlobalParams.PORT = cursor.getInt(cursor.getColumnIndex("port"));

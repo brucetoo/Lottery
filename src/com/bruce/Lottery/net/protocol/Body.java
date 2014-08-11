@@ -13,6 +13,21 @@ import java.util.List;
 public class Body {
 
     private List<Element> elements=new ArrayList<Element>();
+
+
+    /************************处理服务端回复*******************************/
+          private  String servieceBodyInsideDESInfo;    //处理服务端回复的 Des加密信息
+
+    public String getServieceBodyInsideDESInfo() {
+        return servieceBodyInsideDESInfo;
+    }
+
+    public void setServieceBodyInsideDESInfo(String servieceBodyInsideDESInfo) {
+        this.servieceBodyInsideDESInfo = servieceBodyInsideDESInfo;
+    }
+    /************************处理服务端回复*******************************/
+
+
     /**
      * 序列化请求
      */

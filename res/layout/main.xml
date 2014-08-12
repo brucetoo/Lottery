@@ -1,12 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+      <!--顶部标题，3种变化-->
+    <include
+        android:id="@+id/br_title"
+        android:layout_alignParentTop="true"
+        layout="@layout/br_title" />
+
+    <include
+        android:id="@+id/br_bottom"
+        android:layout_alignParentBottom="true"
+        layout="@layout/br_bottom" />
+    <!--中间数据填充-->
+
+    <RelativeLayout
+        android:id="@+id/br_middle"
+        android:layout_width="match_parent"
+                android:layout_height="match_parent"
+        android:layout_above="@id/br_bottom"
+        android:layout_below="@id/br_title"
+        android:background="@color/white" >
+
+    </RelativeLayout>
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World, MainActivity" />
-</LinearLayout>
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="468dp"
+        android:layout_marginBottom="118dp" />
+
+
+</RelativeLayout>
 

@@ -1,7 +1,5 @@
 package com.bruce.Lottery.utils;
 
-import com.bruce.Lottery.engine.UserEngine;
-
 import java.io.IOException;
 import java.util.Properties;
 
@@ -28,20 +26,23 @@ public class BeanFactory {
         }
     }
 
-
-    //根据类名，反射获取实例
-    public static UserEngine getImpl(Class clazz) {
+    /**
+     * 根据类名，反射获取实例
+     * 泛型，使其公共化
+     * @param clazz
+     * @return
+     */
+    public static<T> T getImpl(Class<T> clazz) {
         //getName 是包名和类名  getSimpleName 是类名
         String key = clazz.getSimpleName();
 
         String className = properties.getProperty(key);
         try {
             //反射获取 UserEngine实现类 实例
-            return (UserEngine) Class.forName(className).newInstance();
+            return (T) Class.forName(className).newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
-
 }

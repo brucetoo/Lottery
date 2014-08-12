@@ -4,6 +4,8 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 import android.util.Xml;
 import com.bruce.Lottery.ConstantValue;
+import com.bruce.Lottery.bean.User;
+import com.bruce.Lottery.engine.UserEngineImpl;
 import com.bruce.Lottery.net.protocol.Message;
 import com.bruce.Lottery.net.protocol.element.CurrentIssueElement;
 import org.xmlpull.v1.XmlSerializer;
@@ -19,13 +21,23 @@ public class XmlTest extends AndroidTestCase {
 
 
 
+    public void testLogin(){
+        UserEngineImpl login = new UserEngineImpl();
+        User user = new User();
+        user.setUserName("13200000000");
+        user.setPassword("0000000");
+        Message message = login.login(user);
+        Log.i("loginError",message.getBody().getOelement().getErrorode());
+    }
+
+
 
     public void testCreateXml(){
 
         Message message = new Message();
         CurrentIssueElement element = new CurrentIssueElement();
         element.getLotteryid().setTagValue("118");
-        String str  = message.getXml();
+        String str  = message.getXml(element);
         Log.i("aaaaa",str);
     }
 

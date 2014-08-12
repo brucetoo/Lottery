@@ -10,7 +10,6 @@ import java.io.StringWriter;
  * Created by Bruce
  * Data 2014/8/8
  * Time 11:53.
- *
  */
 public class Message {
 
@@ -35,8 +34,12 @@ public class Message {
             // MUST follow a call to startTag() immediately
             serializer.attribute(null, "version", "1.0");
 
-            header.serializeHeader(serializer, "");// 获取完整的body
-			body.serializerBody(serializer);
+            header.serializeHeader(serializer, body.getWholeBody());// 获取完整的body
+            //body单独序列化，对其进行加密处理
+            serializer.startTag(null, "body");
+            serializer.text(body.getBodyInsideDESInfo());
+            serializer.endTag(null, "body");
+            //body.serializerBody(serializer);
 
             serializer.endTag(null, "message");
         } catch (Exception e) {
@@ -49,14 +52,21 @@ public class Message {
      *
      * @return
      */
-    public String getXml() {
+    public String getXml(Element element) {
+
+        if (element == null) {
+            throw new IllegalArgumentException("element is null");
+        }
+        // 请求标示需要设置，请求内容需要设置
+        header.getTransactiontype().setTagValue(element.getTransactionType());
+        body.getElements().add(element);
 
         // 序列化
         XmlSerializer serializer = Xml.newSerializer();
         StringWriter writer = new StringWriter();
-        // This method can only be called just after setOutput
         try {
             serializer.setOutput(writer);
+            // This method can only be called just after setOutput
             serializer.startDocument(ConstantValue.ENCODING, null);
             this.serializerMessage(serializer);
             serializer.endDocument();

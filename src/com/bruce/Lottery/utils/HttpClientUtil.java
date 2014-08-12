@@ -3,7 +3,6 @@ package com.bruce.Lottery.utils;
 import android.text.TextUtils;
 import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.GlobalParams;
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -12,7 +11,6 @@ import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -27,10 +25,10 @@ public class HttpClientUtil {
    private HttpPost post;  //发送文件
 
     public HttpClientUtil() {
+        httpClient = new DefaultHttpClient();
         //判断代理是否为空
         if(!TextUtils.isEmpty(GlobalParams.PROXY)){
              //不为空就设置代理信息
-              httpClient = new DefaultHttpClient();
             //设置代理信息
             HttpHost host = new HttpHost(GlobalParams.PROXY,GlobalParams.PORT);
             //为http请求设置参数

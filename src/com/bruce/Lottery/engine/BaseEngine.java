@@ -9,7 +9,12 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.xmlpull.v1.XmlPullParser;
 
 import java.io.InputStream;
-
+/**
+ * Created by Bruce
+ * Data 2014/8/12
+ * Time 14:25.
+ * 抽取出解析xml的公共部分。避免代码冗余
+ */
 public abstract class BaseEngine {
 	public Message getResult(String xml) {
 		// 第二步和第三步

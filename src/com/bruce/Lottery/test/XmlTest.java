@@ -5,9 +5,10 @@ import android.util.Log;
 import android.util.Xml;
 import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.bean.User;
-import com.bruce.Lottery.engine.UserEngineImpl;
+import com.bruce.Lottery.engine.UserEngine;
 import com.bruce.Lottery.net.protocol.Message;
 import com.bruce.Lottery.net.protocol.element.CurrentIssueElement;
+import com.bruce.Lottery.utils.BeanFactory;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.StringWriter;
@@ -20,29 +21,34 @@ import java.io.StringWriter;
 public class XmlTest extends AndroidTestCase {
 
 
+    public void testLogin() {
+//        UserEngineImpl login = new UserEngineImpl();
+//        User user = new User();
+//        user.setUserName("13200000000");
+//        user.setPassword("0000000");
+//        Message message = login.login(user);
+//        Log.i("loginError",message.getBody().getOelement().getErrorode());
 
-    public void testLogin(){
-        UserEngineImpl login = new UserEngineImpl();
+        //工厂方法，降低耦合度。。只需要改bean配置文件就完成功能
+        UserEngine userEngine = BeanFactory.getImpl(UserEngine.class);
         User user = new User();
         user.setUserName("13200000000");
         user.setPassword("0000000");
-        Message message = login.login(user);
-        Log.i("loginError",message.getBody().getOelement().getErrorode());
+        Message message = userEngine.login(user);
     }
 
 
-
-    public void testCreateXml(){
+    public void testCreateXml() {
 
         Message message = new Message();
         CurrentIssueElement element = new CurrentIssueElement();
         element.getLotteryid().setTagValue("118");
-        String str  = message.getXml(element);
-        Log.i("aaaaa",str);
+        String str = message.getXml(element);
+        Log.i("aaaaa", str);
     }
 
 
-    public void createXml1(){
+    public void createXml1() {
 
         //序列化
         XmlSerializer serializer = Xml.newSerializer();
@@ -50,7 +56,7 @@ public class XmlTest extends AndroidTestCase {
         StringWriter writer = new StringWriter();
         try {
             serializer.setOutput(writer);
-            serializer.startDocument(ConstantValue.ENCODING,null);
+            serializer.startDocument(ConstantValue.ENCODING, null);
 
             serializer.startTag(null, "message");
             serializer.startTag(null, "header");
@@ -78,7 +84,7 @@ public class XmlTest extends AndroidTestCase {
         }
     }
 
-    public void createXml2(){
+    public void createXml2() {
 
         //序列化
         XmlSerializer serializer = Xml.newSerializer();

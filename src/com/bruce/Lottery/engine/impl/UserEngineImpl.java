@@ -1,8 +1,10 @@
-package com.bruce.Lottery.engine;
+package com.bruce.Lottery.engine.impl;
 
 import android.util.Xml;
 import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.bean.User;
+import com.bruce.Lottery.engine.BaseEngine;
+import com.bruce.Lottery.engine.UserEngine;
 import com.bruce.Lottery.net.protocol.Message;
 import com.bruce.Lottery.net.protocol.element.UserLoginElement;
 import com.bruce.Lottery.utils.DES;
@@ -18,7 +20,7 @@ import java.io.StringReader;
  * on 2014/8/9
  * Time 12:01.
  */
-public class UserEngineImpl extends BaseEngine{
+public class UserEngineImpl extends BaseEngine implements UserEngine{
     /**
      * 用户登录
      *

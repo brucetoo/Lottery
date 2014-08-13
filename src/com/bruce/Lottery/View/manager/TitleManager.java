@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bruce.Lottery.R;
+import com.bruce.Lottery.View.SecondUI;
 
 /**
  * Created by Bruce
@@ -76,9 +77,9 @@ public class TitleManager {
 
             @Override
             public void onClick(View v) {
-               // System.out.println("login");
-                Toast.makeText(activity.getApplicationContext(),"登陆",Toast.LENGTH_LONG).show();
-
+                //点击的时候不能重复的去创建新的UI,因此用字节码的形式
+              //  MiddleManager.getInstance().changeUI(new SecondUI(activity.getApplicationContext()));
+                MiddleManager.getInstance().changeUI(SecondUI.class);
             }
         });
     }

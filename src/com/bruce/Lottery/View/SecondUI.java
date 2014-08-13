@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.bruce.Lottery.View.manager.BaseUI;
 
 /**
  * Created by bruce-too
@@ -12,9 +13,10 @@ import android.widget.TextView;
  * Time 21:48.
  * 第一个测试界面
  */
-public class SecondUI {
+public class SecondUI extends BaseUI{
     private Context context;
     public SecondUI(Context context) {
+        super(context);
         this.context = context;
     }
 

@@ -5,14 +5,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 import com.bruce.Lottery.View.FirstUI;
 import com.bruce.Lottery.View.SecondUI;
+import com.bruce.Lottery.View.manager.BaseUI;
 import com.bruce.Lottery.View.manager.BottomManager;
+import com.bruce.Lottery.View.manager.MiddleManager;
 import com.bruce.Lottery.View.manager.TitleManager;
 import com.bruce.Lottery.utils.AnimationController;
-import com.bruce.Lottery.utils.FadeUtil;
 
 
 public class MainActivity extends Activity {
@@ -25,7 +25,9 @@ public class MainActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            changeUI();
+            //changeUI();
+            changeUI(new SecondUI(MainActivity.this));
+
         }
     };
     @Override
@@ -45,10 +47,12 @@ public class MainActivity extends Activity {
         bottomManager.showCommonBottom();
 
         br_middle = (RelativeLayout) findViewById(R.id.br_middle);
-
-        loadFirstUI();
-        handler.sendEmptyMessageDelayed(1, 2000);
+        MiddleManager.getInstance().setBr_middle(br_middle);
+        MiddleManager.getInstance().changeUI(FirstUI.class);
+      //  loadFirstUI();
+      //  handler.sendEmptyMessageDelayed(1, 2000);
     }
+/*
   View first;
     private void loadFirstUI() {
         FirstUI firstUI = new FirstUI(this);
@@ -66,15 +70,18 @@ public class MainActivity extends Activity {
         AnimationController.scaleRotateIn(child,2000,2000);
     }
 
+*/
 
     /**
      * 切换界面
      */
-    protected void changeUI() {
+    protected void changeUI(BaseUI  ui) {
         // 切换界面的核心代码
-       // br_middle.removeAllViews();
+        br_middle.removeAllViews();
+        View view = ui.getChild();
+         br_middle.addView(view);
       //  FadeUtil.FadeOut(first,2000);
-        AnimationController.scaleRotateOut(first,2000,0);
-        loadSecondUI();
+        AnimationController.slideFadeIn(view, 2000, 0);
+     //   loadSecondUI();
     }
 }

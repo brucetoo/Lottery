@@ -8,7 +8,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.R;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * 控制底部导航容器
@@ -16,7 +21,7 @@ import com.bruce.Lottery.R;
  * @author Administrator
  * 
  */
-public class BottomManager {
+public class BottomManager implements Observer{
 	protected static final String TAG = "BottomManager";
 	/******************* 第一步：管理对象的创建(单例模式) ***************************************************/
 	// 创建一个静态实例
@@ -136,8 +141,18 @@ public class BottomManager {
 		playBottomNotice.setText(notice);
 	}
 
-	/*********************************************************************************************/
-
-
+    @Override
+    public void update(Observable observable, Object data) {
+        if(data!=null && StringUtils.isNumeric(data.toString())){
+            switch (Integer.valueOf(data.toString())){
+                case ConstantValue.FIRST_VIEW:
+                    instrance.showCommonBottom();
+                    break;
+                case ConstantValue.SECOND_VIEW:
+                    instrance.showGameBottom();
+                    break;
+            }
+        }
+    }
 
 }

@@ -6,15 +6,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.R;
 import com.bruce.Lottery.View.SecondUI;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by Bruce
  * Data 2014/8/12
  * Time 16:33.
  */
-public class TitleManager {
+public class TitleManager implements Observer{
 
     /**
      * 单例模式，因为TitleManager只需要被加载一次就OK
@@ -129,5 +134,22 @@ public class TitleManager {
 
     public void changeTitle(String title) {
         titleContent.setText(title);
+    }
+
+
+
+    @Override
+    public void update(Observable observable, Object data) {
+        //data 表示在调用notifyObserver时传递的参数 在此为 view  ID
+        if(data!=null && StringUtils.isNumeric(data.toString())){
+            switch (Integer.valueOf(data.toString())){
+                case ConstantValue.FIRST_VIEW:
+                    instance.showUnLoginContainer();
+                    break;
+                case ConstantValue.SECOND_VIEW:
+                    instance.showCommonContainer();
+                    break;
+            }
+        }
     }
 }

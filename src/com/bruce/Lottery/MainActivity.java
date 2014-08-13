@@ -17,15 +17,6 @@ public class MainActivity extends Activity {
      */
     private RelativeLayout br_middle;
 
-   /* Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            //changeUI();
-            changeUI(new SecondUI(MainActivity.this));
-
-        }
-    };*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,10 +34,16 @@ public class MainActivity extends Activity {
         bottomManager.showCommonBottom();
 
         br_middle = (RelativeLayout) findViewById(R.id.br_middle);
-        MiddleManager.getInstance().setBr_middle(br_middle);
-        MiddleManager.getInstance().changeUI(FirstUI.class);
-      //  loadFirstUI();
-      //  handler.sendEmptyMessageDelayed(1, 2000);
+        MiddleManager middleManager = MiddleManager.getInstance();
+        middleManager.setBr_middle(br_middle);
+        //建立观察者和被观察者间的关系
+        middleManager.addObserver(manager);
+        middleManager.addObserver(bottomManager);
+
+        middleManager.changeUI(FirstUI.class);
+
+
+
     }
 
     @Override

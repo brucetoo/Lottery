@@ -21,4 +21,9 @@ public abstract class BaseUI {
      * @return
      */
     public abstract View getChild();
+
+    /**
+     * 给每个VIEW设定一个唯一的标示
+     */
+    public abstract int getID();
 }

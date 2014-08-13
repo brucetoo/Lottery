@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.View.manager.BaseUI;
 
 /**
@@ -22,9 +23,14 @@ public class FirstUI extends BaseUI{
         init();
     }
 
+    @Override
     public View getChild(){
-
         return textView;
+    }
+
+    @Override
+    public int getID() {
+        return ConstantValue.FIRST_VIEW;
     }
 
     private void init() {

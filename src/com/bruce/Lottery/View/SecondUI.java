@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.View.manager.BaseUI;
 
 /**
@@ -19,7 +20,7 @@ public class SecondUI extends BaseUI{
         super(context);
         this.context = context;
     }
-
+    @Override
     public View getChild(){
         TextView textView = new TextView(context);
 
@@ -29,5 +30,10 @@ public class SecondUI extends BaseUI{
         textView.setBackgroundColor(Color.BLUE);
         textView.setText("这是测试页面2");
         return textView;
+    }
+
+    @Override
+    public int getID() {
+        return ConstantValue.SECOND_VIEW;
     }
 }

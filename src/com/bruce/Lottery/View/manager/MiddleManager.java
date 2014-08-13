@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Observable;
 
 /**
  * Created by Bruce
@@ -16,7 +17,7 @@ import java.util.Map;
  * Time 9:51.
  * 中间容器的管理类
  */
-public class MiddleManager {
+public class MiddleManager extends Observable{
 
     //单例模式！在 find id的时候就实例化
     private static MiddleManager instance = new MiddleManager();
@@ -83,6 +84,65 @@ public class MiddleManager {
         currentUI = targetUI;
         //切换成功，保存到操作到栈顶
         history.addFirst(key);
+
+
+        //切换页面成功后，需要改变title和bottom
+        changeTitleAndBottom();
+    }
+
+    private void changeTitleAndBottom() {
+        // 降低三个容器的耦合度
+        // 当中间容器变动的时候，中间容器“通知”其他的容器，你们该变动了，唯一的标示传递，其他容器依据唯一标示进行容器内容的切换
+        // ①将中间容器变成被观察的对象
+        // ②标题和底部导航变成观察者
+        // ③建立观察者和被观察者之间的关系（标题和底部导航添加到观察者的容器里面）
+        // ④一旦中间容器变动，修改boolean，然后通知所有的观察者.updata()
+
+        setChanged();
+        notifyObservers(currentUI.getID());
+
+        // 1、界面一对应未登陆标题和通用导航
+        // 2、界面二对应通用标题和玩法导航
+
+        //通过 每个View对应的唯一标示来区分，完成容器联动
+       /* switch (currentUI.getID()){
+            case ConstantValue.FIRST_VIEW:
+                TitleManager.getInstance().showUnLoginContainer();
+                BottomManager.getInstrance().showCommonBottom();
+                break;
+            case ConstantValue.SECOND_VIEW:
+                TitleManager.getInstance().showCommonContainer();
+                BottomManager.getInstrance().showGameBottom();
+                break;
+        }*/
+    }
+    /**
+     * 用户按返回键时候切换View
+     *
+     * @return
+     */
+    public boolean goBack() {
+        if (history.size() > 0) {
+            //只有一个时 不删除（用户误操作可能）
+            if (history.size() == 1) {
+                return false;
+            }
+            //移除栈顶第一个
+            history.removeFirst();
+
+            if (history.size() > 0) {
+                //得到移除后的第一个
+                String key = history.getFirst();
+                BaseUI targetUI = uiCache.get(key);
+                br_middle.removeAllViews();
+                br_middle.addView(targetUI.getChild());
+
+                currentUI = targetUI; //将正在显示的UI 改变
+                changeTitleAndBottom();
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -137,31 +197,4 @@ public class MiddleManager {
     //String 代表 uiCache中的key
     private LinkedList<String> history = new LinkedList<String>();//用户界面操作的记录
 
-    /**
-     * 用户按返回键时候切换View
-     *
-     * @return
-     */
-    public boolean goBack() {
-        if (history.size() > 0) {
-            //只有一个时 不删除（用户误操作可能）
-            if (history.size() == 1) {
-                return false;
-            }
-            //移除栈顶第一个
-            history.removeFirst();
-
-            if (history.size() > 0) {
-                //得到移除后的第一个
-                String key = history.getFirst();
-                BaseUI targetUI = uiCache.get(key);
-                br_middle.removeAllViews();
-                br_middle.addView(targetUI.getChild());
-
-                currentUI = targetUI; //将正在显示的UI 改变
-                return true;
-            }
-        }
-        return false;
-    }
 }

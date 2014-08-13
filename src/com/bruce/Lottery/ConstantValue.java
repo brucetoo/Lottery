@@ -40,4 +40,10 @@ public interface ConstantValue {
      */
     String LOTTERY_URI = "http://192.168.22.189:8080/Entrance";
 
+    /**
+     * View ID
+     */
+    int FIRST_VIEW  = 1;
+    int SECOND_VIEW = 2;
+
 }

@@ -2,17 +2,11 @@ package com.bruce.Lottery;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.view.View;
 import android.widget.RelativeLayout;
 import com.bruce.Lottery.View.FirstUI;
-import com.bruce.Lottery.View.SecondUI;
-import com.bruce.Lottery.View.manager.BaseUI;
 import com.bruce.Lottery.View.manager.BottomManager;
 import com.bruce.Lottery.View.manager.MiddleManager;
 import com.bruce.Lottery.View.manager.TitleManager;
-import com.bruce.Lottery.utils.AnimationController;
 
 
 public class MainActivity extends Activity {
@@ -21,7 +15,7 @@ public class MainActivity extends Activity {
      */
     private RelativeLayout br_middle;
 
-    Handler handler = new Handler(){
+   /* Handler handler = new Handler(){
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
@@ -29,7 +23,7 @@ public class MainActivity extends Activity {
             changeUI(new SecondUI(MainActivity.this));
 
         }
-    };
+    };*/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +46,16 @@ public class MainActivity extends Activity {
       //  loadFirstUI();
       //  handler.sendEmptyMessageDelayed(1, 2000);
     }
-/*
+
+    @Override
+    public void onBackPressed() {
+        boolean canBack = MiddleManager.getInstance().goBack();
+        if(!canBack) {
+            super.onBackPressed();
+        }
+    }
+
+    /*
   View first;
     private void loadFirstUI() {
         FirstUI firstUI = new FirstUI(this);
@@ -71,10 +74,10 @@ public class MainActivity extends Activity {
     }
 
 */
-
-    /**
+/*
+    *//**
      * 切换界面
-     */
+     *//*
     protected void changeUI(BaseUI  ui) {
         // 切换界面的核心代码
         br_middle.removeAllViews();
@@ -83,5 +86,5 @@ public class MainActivity extends Activity {
       //  FadeUtil.FadeOut(first,2000);
         AnimationController.slideFadeIn(view, 2000, 0);
      //   loadSecondUI();
-    }
+    }*/
 }

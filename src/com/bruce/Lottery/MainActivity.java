@@ -2,7 +2,9 @@ package com.bruce.Lottery;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 import com.bruce.Lottery.View.FirstUI;
 import com.bruce.Lottery.View.manager.BottomManager;
 import com.bruce.Lottery.View.manager.MiddleManager;
@@ -48,11 +50,16 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    public void onBackPressed() {
-        boolean canBack = MiddleManager.getInstance().goBack();
-        if(!canBack) {
-            super.onBackPressed();
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            boolean result = MiddleManager.getInstance().goBack();
+            // 返回键操作失败
+            if (!result) {
+                Toast.makeText(MainActivity.this, "是否退出系统", 1).show();
+            }
+            return false;
         }
+        return super.onKeyDown(keyCode, event);
     }
 
     /*

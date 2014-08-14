@@ -4,11 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-import com.bruce.Lottery.View.FirstUI;
+import com.bruce.Lottery.View.Hall;
 import com.bruce.Lottery.View.manager.BottomManager;
 import com.bruce.Lottery.View.manager.MiddleManager;
 import com.bruce.Lottery.View.manager.TitleManager;
+import com.bruce.Lottery.utils.PromptManager;
 
 
 public class MainActivity extends Activity {
@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
         middleManager.addObserver(manager);
         middleManager.addObserver(bottomManager);
 
-        middleManager.changeUI(FirstUI.class);
+        middleManager.changeUI(Hall.class);
 
 
 
@@ -52,7 +52,8 @@ public class MainActivity extends Activity {
             boolean result = MiddleManager.getInstance().goBack();
             // 返回键操作失败
             if (!result) {
-                Toast.makeText(MainActivity.this, "是否退出系统", 1).show();
+                //Toast.makeText(MainActivity.this, "是否退出系统", 1).show();
+                PromptManager.showExitSystem(this);
             }
             return false;
         }

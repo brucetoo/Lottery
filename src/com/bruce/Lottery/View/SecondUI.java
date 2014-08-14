@@ -15,11 +15,20 @@ import com.bruce.Lottery.View.manager.BaseUI;
  * 第一个测试界面
  */
 public class SecondUI extends BaseUI{
-    private Context context;
     public SecondUI(Context context) {
         super(context);
-        this.context = context;
     }
+
+    @Override
+    protected void setListener() {
+
+    }
+
+    @Override
+    protected void init() {
+
+    }
+
     @Override
     public View getChild(){
         TextView textView = new TextView(context);
@@ -35,5 +44,10 @@ public class SecondUI extends BaseUI{
     @Override
     public int getID() {
         return ConstantValue.SECOND_VIEW;
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

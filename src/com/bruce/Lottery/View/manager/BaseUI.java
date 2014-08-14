@@ -2,6 +2,8 @@ package com.bruce.Lottery.View.manager;
 
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 /**
  * Created by Bruce
@@ -9,18 +11,45 @@ import android.view.View;
  * Time 9:07.
  * 所以中间界面的基类
  */
-public abstract class BaseUI {
+public abstract class BaseUI implements View.OnClickListener {
 
-    protected Context context;
-    protected BaseUI(Context context) {
+    public Context context;
+    //将要在中间显示的布局文件放在父类中
+    public ViewGroup showInMiddle;
+
+    public BaseUI(Context context) {
         this.context = context;
+        init();
+        setListener();
     }
 
     /**
+     * 设置界面点击事件
+     */
+    protected abstract void setListener();
+
+    /**
+     * 初始化界面
+     */
+    protected abstract void init();
+
+    /**
      * 中间界面的内容填充view
+     *
      * @return
      */
-    public abstract View getChild();
+    public View getChild() {
+        //在容器中布局返回前，设置器LayoutParam
+        //在自定义的VIew用inflate填充时，可能会出现屏幕没填满
+        //原因是root == null 导致了   layoutMiddle.getLayoutParams() == null
+        if (showInMiddle.getLayoutParams() == null) {
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+            showInMiddle.setLayoutParams(params);
+        }
+        return showInMiddle;
+    }
 
     /**
      * 给每个VIEW设定一个唯一的标示

@@ -143,7 +143,7 @@ public class TitleManager implements Observer{
         //data 表示在调用notifyObserver时传递的参数 在此为 view  ID
         if(data!=null && StringUtils.isNumeric(data.toString())){
             switch (Integer.valueOf(data.toString())){
-                case ConstantValue.FIRST_VIEW:
+                case ConstantValue.VIEW_HALL:
                     instance.showUnLoginContainer();
                     break;
                 case ConstantValue.SECOND_VIEW:

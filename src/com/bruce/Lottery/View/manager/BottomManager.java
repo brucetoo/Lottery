@@ -145,7 +145,7 @@ public class BottomManager implements Observer{
     public void update(Observable observable, Object data) {
         if(data!=null && StringUtils.isNumeric(data.toString())){
             switch (Integer.valueOf(data.toString())){
-                case ConstantValue.FIRST_VIEW:
+                case ConstantValue.VIEW_HALL:
                     instrance.showCommonBottom();
                     break;
                 case ConstantValue.SECOND_VIEW:

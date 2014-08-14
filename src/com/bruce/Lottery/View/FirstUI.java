@@ -24,7 +24,12 @@ public class FirstUI extends BaseUI{
     }
 
     @Override
+    protected void setListener() {
+
+    }
+
     public View getChild(){
+
         return textView;
     }
 
@@ -33,7 +38,7 @@ public class FirstUI extends BaseUI{
         return ConstantValue.FIRST_VIEW;
     }
 
-    private void init() {
+    public void init() {
         textView = new TextView(context);
 
         ViewGroup.LayoutParams layoutParams = textView.getLayoutParams();
@@ -41,5 +46,10 @@ public class FirstUI extends BaseUI{
         textView.setLayoutParams(layoutParams);
         textView.setBackgroundColor(Color.RED);
         textView.setText("这是测试页面1");
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }

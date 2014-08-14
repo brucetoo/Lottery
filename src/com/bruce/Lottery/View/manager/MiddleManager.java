@@ -97,24 +97,9 @@ public class MiddleManager extends Observable{
         // ②标题和底部导航变成观察者
         // ③建立观察者和被观察者之间的关系（标题和底部导航添加到观察者的容器里面）
         // ④一旦中间容器变动，修改boolean，然后通知所有的观察者.updata()
-
         setChanged();
         notifyObservers(currentUI.getID());
 
-        // 1、界面一对应未登陆标题和通用导航
-        // 2、界面二对应通用标题和玩法导航
-
-        //通过 每个View对应的唯一标示来区分，完成容器联动
-       /* switch (currentUI.getID()){
-            case ConstantValue.FIRST_VIEW:
-                TitleManager.getInstance().showUnLoginContainer();
-                BottomManager.getInstrance().showCommonBottom();
-                break;
-            case ConstantValue.SECOND_VIEW:
-                TitleManager.getInstance().showCommonContainer();
-                BottomManager.getInstrance().showGameBottom();
-                break;
-        }*/
     }
     /**
      * 用户按返回键时候切换View

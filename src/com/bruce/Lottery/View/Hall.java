@@ -6,6 +6,9 @@ import android.widget.LinearLayout;
 import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.R;
 import com.bruce.Lottery.View.manager.BaseUI;
+import com.bruce.Lottery.engine.CommonInfoEngine;
+import com.bruce.Lottery.net.protocol.Message;
+import com.bruce.Lottery.utils.BeanFactory;
 
 /**
  * Created by bruce-too
@@ -36,4 +39,32 @@ public class Hall extends BaseUI {
     public void onClick(View v) {
 
     }
+
+    /**
+     * 获取双色球当前销售期信息
+     */
+    private void getCurrentIssueInfo(){
+          //异步访问网络获取数据
+
+        //传递彩票信息的唯一标示
+       // new MyHttpTask().execute(ConstantValue.SSQ);
+        new MyHttpTask<Integer>() {
+
+            @Override
+            protected Message doInBackground(Integer... params) {
+                //后台统一获取 业务的调用
+                CommonInfoEngine engine = BeanFactory.getImpl(CommonInfoEngine.class);
+                return engine.getCurrentIssueInfo(params[0]);
+            }
+
+            @Override
+            protected void onPostExecute(Message message) {
+                super.onPostExecute(message);
+
+
+            }
+        }.executeProxy(ConstantValue.SSQ);
+
+    }
+
 }

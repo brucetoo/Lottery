@@ -1,9 +1,13 @@
 package com.bruce.Lottery.View.manager;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import com.bruce.Lottery.net.protocol.Message;
+import com.bruce.Lottery.utils.NetUtil;
+import com.bruce.Lottery.utils.PromptManager;
 
 /**
  * Created by Bruce
@@ -55,4 +59,24 @@ public abstract class BaseUI implements View.OnClickListener {
      * 给每个VIEW设定一个唯一的标示
      */
     public abstract int getID();
+
+    /**
+     * 异步检查联网的抽象类
+     * @param <Parma> 标示实例化 异步联网时 传递的参数类型
+     */
+    public abstract class MyHttpTask<Parma> extends AsyncTask<Parma,Void,Message> {
+        /**
+         * 类似于Thread中的start的方法，但是excute方法不能重写，所以只能对其改名，然后调用父类的excute方法
+         * @param params
+         * @return
+         */
+        public final AsyncTask<Parma,Void,Message> executeProxy(Parma... params) {
+            if(NetUtil.checkNet(context)){
+                return super.execute(params);
+            }else{
+                PromptManager.showNoNetWork(context);
+            }
+            return null;
+        }
+    }
 }

@@ -127,7 +127,10 @@ public class Hall2 extends BaseUI {
         String text = context.getResources().getString(R.string.is_hall_common_summary);
         text = StringUtils.replaceEach(text,new String[]{"ISSUE","TIME"},
                                 new String[]{element1.getIssue(),getLasttime(element1.getLasttime())});
-
+        TextView view = (TextView) ii_hall_lottery_list.findViewWithTag(0);
+        if(view != null){
+            view.setText(text);
+        }
     }
 
 
@@ -164,7 +167,6 @@ public class Hall2 extends BaseUI {
                 holder.logo = (ImageView) convertView.findViewById(R.id.ii_hall_lottery_logo);
                 holder.title = (TextView) convertView.findViewById(R.id.ii_hall_lottery_title);
                 holder.summary = (TextView) convertView.findViewById(R.id.ii_hall_lottery_summary);
-                // needUpdate.add(holder.summary);
                 holder.bet = (ImageView) convertView.findViewById(R.id.ii_hall_lottery_bet);
 
                 // A tag can be used to mark a view in its hierarchy and does not have to be unique within the hierarchy.
@@ -180,9 +182,6 @@ public class Hall2 extends BaseUI {
 
             holder.summary.setTag(position);
 
-            // if (StringUtils.isNotBlank(text) && position == 0) {
-            // holder.summary.setText(text);
-            // }
             return convertView;
         }
 

@@ -1,10 +1,12 @@
 package com.bruce.Lottery;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
-import com.bruce.Lottery.View.Hall;
+import com.bruce.Lottery.View.Hall2;
 import com.bruce.Lottery.View.manager.BottomManager;
 import com.bruce.Lottery.View.manager.MiddleManager;
 import com.bruce.Lottery.View.manager.TitleManager;
@@ -25,6 +27,8 @@ public class MainActivity extends Activity {
     }
 
     private void init() {
+        CreateShut(this);
+
         TitleManager manager = TitleManager.getInstance();
         manager.init(this);
         manager.showUnLoginContainer();
@@ -40,10 +44,30 @@ public class MainActivity extends Activity {
         middleManager.addObserver(manager);
         middleManager.addObserver(bottomManager);
 
-        middleManager.changeUI(Hall.class);
+        middleManager.changeUI(Hall2.class);
 
-
-
+    }
+    public void CreateShut(Activity activity) {
+        // intent进行隐式跳转,到桌面创建快捷方式
+        Intent addIntent = new Intent(
+                "com.android.launcher.action.INSTALL_SHORTCUT");
+        //不允许重建
+        addIntent.putExtra("duplicate", false);
+        // 得到应用的名称
+        String title = activity.getResources().getString(R.string.app_name);
+        // 将应用的图标设置为Parceable类型
+        Parcelable icon = Intent.ShortcutIconResource.fromContext(
+                activity, R.drawable.icon);
+        // 点击图标之后的意图操作
+        Intent myIntent = new Intent(activity, MainActivity.class);
+        // 设置快捷方式的名称
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, title);
+        // 设置快捷方式的图标     // addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, BitmapFactory.decodeResource(getResources,R.drawable.ic_launcher));
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
+        // 设置快捷方式的意图
+        addIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, myIntent);
+        // 发送广播
+        activity.sendBroadcast(addIntent);
     }
 
     @Override

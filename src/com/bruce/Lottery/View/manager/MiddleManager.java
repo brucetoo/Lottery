@@ -39,7 +39,9 @@ public class MiddleManager extends Observable{
         this.br_middle = br_middle;
     }
 
-
+    /**
+     * 存放UI界面，String UI类名  BaseUI UI类型
+     */
     private Map<String, BaseUI> uiCache = new HashMap<String, BaseUI>();//存放创建的ＵＩ界面
 
     private BaseUI currentUI; //当前显示的UI
@@ -76,17 +78,26 @@ public class MiddleManager extends Observable{
             }
         }
         System.out.println("---------------targetUI:" + targetUI.toString());
+
+        //在移除之前的页面前。 ---onPause方法，
+        if(currentUI != null){
+            currentUI.onPause();
+        }
         br_middle.removeAllViews();
         View view = targetUI.getChild();
         br_middle.addView(view);
         AnimationController.slideFadeIn(view, 2000, 0);
-        //页面切换成功后，设置正在显示的页面
+
+        //在添加页面成功够 -----onResume方法
+        targetUI.onResume();
+
+        //页面切换成功后，设置正在显示的页面  ---用于判断是否同一个UI
         currentUI = targetUI;
-        //切换成功，保存到操作到栈顶
+        //切换成功，保存到操作到栈顶---用于返回键的操作
         history.addFirst(key);
 
 
-        //切换页面成功后，需要改变title和bottom
+        //切换页面成功后，需要改变title和bottom ---用 观察者模式
         changeTitleAndBottom();
     }
 

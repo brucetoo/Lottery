@@ -61,6 +61,20 @@ public abstract class BaseUI implements View.OnClickListener {
     public abstract int getID();
 
     /**
+     * 删除页面前调用
+     */
+    public void onPause(){
+    }
+
+
+    /**
+     * 添加页面后调用
+     */
+    public void onResume(){
+    }
+
+
+    /**
      * 异步检查联网的抽象类
      * @param <Parma> 标示实例化 异步联网时 传递的参数类型
      */

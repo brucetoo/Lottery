@@ -37,9 +37,7 @@ public class NetUtil {
             //没有联网
             return false;
         }
-
-
-        return false;
+        return true;
     }
 
     /**

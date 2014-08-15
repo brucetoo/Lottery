@@ -15,7 +15,34 @@ public class CurrentIssueElement extends Element {
     // <lotteryid>118</lotteryid>
     // <issues>1</issues>
     private Leaf lotteryid = new Leaf("lotteryid");
-    private Leaf issues = new Leaf("issues","1");//常量直接传递
+    private Leaf issues = new Leaf("issues", "1");//常量直接传递
+
+    /**
+     * ****************服务器回复*******************
+     */
+    private String issue;
+    private String lasttime;
+
+    public String getIssue() {
+        return issue;
+    }
+
+    public void setIssue(String issue) {
+        this.issue = issue;
+    }
+
+    public String getLasttime() {
+        return lasttime;
+    }
+
+    public void setLasttime(String lasttime) {
+        this.lasttime = lasttime;
+    }
+
+    /**
+     * ****************服务器回复*******************
+     */
+
 
     @Override
     public void serializeElement(XmlSerializer serializer) {
@@ -36,6 +63,7 @@ public class CurrentIssueElement extends Element {
 
     /**
      * 变量在调用时设置
+     *
      * @return
      */
     public Leaf getLotteryid() {

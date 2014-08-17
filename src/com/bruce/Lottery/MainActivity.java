@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
+import com.bruce.Lottery.View.Hall;
 import com.bruce.Lottery.View.Hall2;
 import com.bruce.Lottery.View.manager.BottomManager;
 import com.bruce.Lottery.View.manager.MiddleManager;
@@ -23,6 +25,10 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        GlobalParams.WD_WIDTH = metrics.widthPixels;
         init();
     }
 
@@ -44,9 +50,10 @@ public class MainActivity extends Activity {
         middleManager.addObserver(manager);
         middleManager.addObserver(bottomManager);
 
-        middleManager.changeUI(Hall2.class);
+        middleManager.changeUI(Hall.class);
 
     }
+
     public void CreateShut(Activity activity) {
         // intent进行隐式跳转,到桌面创建快捷方式
         Intent addIntent = new Intent(

@@ -64,9 +64,13 @@ public class MyGridView extends GridView {
                 showPop(child);
                 break;
             case MotionEvent.ACTION_MOVE:
+                //截断父类的点击事件
+                this.getParent().getParent().requestDisallowInterceptTouchEvent(true);
                 update(child);
                 break;
             case MotionEvent.ACTION_UP:
+                //不截断父类点击事件
+                 this.getParent().getParent().requestDisallowInterceptTouchEvent(false);
                 hidePop();
                 //设置一个监听接口，在实例中实现背景点击切换
                 if(onActionUpListener != null) {

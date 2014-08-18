@@ -1,6 +1,8 @@
 package com.bruce.Lottery.View;
 
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -16,6 +18,7 @@ import com.bruce.Lottery.adapter.PoolAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by Bruce
@@ -38,6 +41,12 @@ public class playSSQ extends BaseUI {
     private List<Integer> redNum;
     private List<Integer> blueNum;
 
+    /**
+     * 传感器管理
+     */
+    private SensorManager manager;
+    private shakeListener listener;
+
     public playSSQ(Context context) {
         super(context);
     }
@@ -47,7 +56,7 @@ public class playSSQ extends BaseUI {
         randomBlue.setOnClickListener(this);
         randomRed.setOnClickListener(this);
 
-        redContainer.setOnActionUpListener(new MyGridView.OnActionUpListener(){
+        redContainer.setOnActionUpListener(new MyGridView.OnActionUpListener() {
 
             @Override
             public void OnActionUp(View view, int position) {
@@ -58,7 +67,7 @@ public class playSSQ extends BaseUI {
                 } else { //被选中就直接变颜色
                     view.setBackgroundResource(R.drawable.id_defalut_ball);
                     //此处是按照Object删除，不能单纯用position+1
-                    redNum.remove((Object)(position+1));
+                    redNum.remove((Object) (position + 1));
                 }
             }
         });
@@ -89,7 +98,7 @@ public class playSSQ extends BaseUI {
                 } else { //被选中就直接变颜色
                     view.setBackgroundResource(R.drawable.id_defalut_ball);
                     //此处是按照Object删除，不能单纯用position+1
-                    blueNum.remove((Object)(position+1));
+                    blueNum.remove((Object) (position + 1));
                 }
             }
         });
@@ -98,7 +107,17 @@ public class playSSQ extends BaseUI {
     @Override
     public void onResume() {
         super.onResume();
+        //注册传感器，传感器很耗时，所以在退出该页面时 onPause需要注销掉
+        listener = new shakeListener();
+        manager.registerListener(listener,manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_FASTEST);
         changeTitle();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+     //注销传感器
+        manager.unregisterListener(listener);
     }
 
     @Override
@@ -109,14 +128,18 @@ public class playSSQ extends BaseUI {
         blueContainer = (GridView) showInMiddle.findViewById(R.id.ii_ssq_blue_number_container);
         randomRed = (Button) showInMiddle.findViewById(R.id.ii_ssq_random_red);
         randomBlue = (Button) showInMiddle.findViewById(R.id.ii_ssq_random_blue);
-        redAdapter = new PoolAdapter(context, 33);
-        blueAdapter = new PoolAdapter(context, 16);
+
 
         redNum = new ArrayList<Integer>();
         blueNum = new ArrayList<Integer>();
 
+        redAdapter = new PoolAdapter(context, 33,redNum,R.drawable.id_redball);
+        blueAdapter = new PoolAdapter(context, 16,blueNum,R.drawable.id_blueball);
+
         blueContainer.setAdapter(blueAdapter);
         redContainer.setAdapter(redAdapter);
+
+        manager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
     }
 
     @Override
@@ -126,12 +149,24 @@ public class playSSQ extends BaseUI {
 
     @Override
     public void onClick(View v) {
+        Random random = new Random();
         switch (v.getId()) {
             case R.id.ii_ssq_random_red:
-
+                redNum.clear();
+                while (redNum.size() < 6) {
+                    int num = random.nextInt(33) + 1;
+                    if (redNum.contains(num)) {
+                        continue;
+                    }
+                   redNum.add(num);
+                }
+                redAdapter.notifyDataSetChanged();
                 break;
             case R.id.ii_ssq_random_blue:
-
+                blueNum.clear();
+                int num = random.nextInt(16) + 1;
+                blueNum.add(num);
+                blueAdapter.notifyDataSetChanged();
                 break;
         }
     }

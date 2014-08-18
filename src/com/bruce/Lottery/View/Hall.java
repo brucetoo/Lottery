@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
+import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.GlobalParams;
 import com.bruce.Lottery.R;
 import com.bruce.Lottery.View.manager.BaseUI;
+import com.bruce.Lottery.View.manager.MiddleManager;
 import com.bruce.Lottery.bean.Oelement;
 import com.bruce.Lottery.engine.CommonInfoEngine;
 import com.bruce.Lottery.net.protocol.Element;
@@ -257,6 +259,14 @@ public class Hall extends BaseUI {
         return result.toString();
     }
 
+
+    //页面切换需要传递的数据
+    private Bundle ssqBuddle;
+
+    /**
+     * 通知界面 Title 改变
+     * @param element
+     */
     private void notifyChanged(Element element) {
         CurrentIssueElement element1 = (CurrentIssueElement) element;
         String text = context.getResources().getString(R.string.is_hall_common_summary);
@@ -266,6 +276,9 @@ public class Hall extends BaseUI {
         if(view != null){
             view.setText(text);
         }
+
+        ssqBuddle = new Bundle();
+        ssqBuddle.putString("issue",element1.getIssue());
     }
 
 
@@ -317,6 +330,12 @@ public class Hall extends BaseUI {
 
             holder.summary.setTag(position);
 
+            holder.bet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MiddleManager.getInstance().changeUI(playSSQ.class,ssqBuddle);
+                }
+            });
             return convertView;
         }
 

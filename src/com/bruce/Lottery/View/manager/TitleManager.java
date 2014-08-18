@@ -149,6 +149,9 @@ public class TitleManager implements Observer{
                 case ConstantValue.SECOND_VIEW:
                     instance.showCommonContainer();
                     break;
+                case ConstantValue.VIEW_SSQ:
+                    instance.showCommonContainer();
+                    break;
             }
         }
     }

@@ -1,8 +1,10 @@
 package com.bruce.Lottery.View.manager;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
+import com.bruce.Lottery.View.playSSQ;
 import com.bruce.Lottery.utils.AnimationController;
 
 import java.lang.reflect.Constructor;
@@ -46,6 +48,68 @@ public class MiddleManager extends Observable{
 
     private BaseUI currentUI; //当前显示的UI
 
+
+    /**
+     * 带数据传递的ChangeUI
+     * @param targetClazz
+     * @param bundle
+     */
+    public void changeUI(Class<? extends BaseUI> targetClazz, Bundle bundle) {
+
+        //判断现在显示的页面是否和目标切换UI相同
+        if (currentUI != null && targetClazz.getSimpleName().equals(currentUI.getClass().getSimpleName())) {
+            return;
+        }
+        // 切换界面的核心代码
+        BaseUI targetUI = null;
+        //将创建的View保存到list中，每次changeUI的时候都判定一下是否存在
+        //存在就考虑重用
+        String key = targetClazz.getSimpleName();
+        if (uiCache.containsKey(key)) {
+            //存在就重用
+            targetUI = uiCache.get(key);
+        } else {
+            //不存在就创建
+            try {
+                //  targetUI = targetClazz.newInstance(); 该方法是调用无参的构造方法
+                //调用有参数的构造方法
+                Constructor<? extends BaseUI> constructor = targetClazz.getConstructor(Context.class);
+                targetUI = constructor.newInstance(getContext());
+                //存储创建过的 UI
+                uiCache.put(key, targetUI);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("---------------targetUI:" + targetUI.toString());
+
+
+        if(targetUI != null){
+            targetUI.setBundle(bundle);
+        }
+
+        //在移除之前的页面前。 ---onPause方法，
+        if(currentUI != null){
+            currentUI.onPause();
+        }
+        br_middle.removeAllViews();
+        View view = targetUI.getChild();
+        br_middle.addView(view);
+        AnimationController.slideFadeIn(view, 2000, 0);
+
+        //在添加页面成功够 -----onResume方法
+        targetUI.onResume();
+
+        //页面切换成功后，设置正在显示的页面  ---用于判断是否同一个UI
+        currentUI = targetUI;
+        //切换成功，保存到操作到栈顶---用于返回键的操作
+        history.addFirst(key);
+
+
+        //切换页面成功后，需要改变title和bottom ---用 观察者模式
+        changeTitleAndBottom();
+
+    }
     /**
      * 切换界面
      * 中间容器中，每次切换没有判断当前正在展示和需要切换的目标是不是同一个
@@ -192,5 +256,6 @@ public class MiddleManager extends Observable{
 
     //String 代表 uiCache中的key
     private LinkedList<String> history = new LinkedList<String>();//用户界面操作的记录
+
 
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <!--
+    运动的轨迹。。sin()
+    android:interpolator="@android:anim/cycle_interpolator"-->
+<translate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromXDelta="0"
+    android:toXDelta="5"
+    android:duration="200"
+    android:interpolator="@android:anim/cycle_interpolator"
+    android:repeatCount="3"
+    >
+
+
+</translate>

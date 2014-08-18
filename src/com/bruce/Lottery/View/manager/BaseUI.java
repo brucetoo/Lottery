@@ -2,6 +2,7 @@ package com.bruce.Lottery.View.manager;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -16,6 +17,13 @@ import com.bruce.Lottery.utils.PromptManager;
  * 所以中间界面的基类
  */
 public abstract class BaseUI implements View.OnClickListener {
+
+    //页面间传递数据
+    public Bundle bundle;
+
+    public void setBundle(Bundle bundle) {
+        this.bundle = bundle;
+    }
 
     public Context context;
     //将要在中间显示的布局文件放在父类中

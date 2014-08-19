@@ -8,7 +8,6 @@ import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
 import com.bruce.Lottery.View.Hall;
-import com.bruce.Lottery.View.Hall2;
 import com.bruce.Lottery.View.manager.BottomManager;
 import com.bruce.Lottery.View.manager.MiddleManager;
 import com.bruce.Lottery.View.manager.TitleManager;
@@ -26,6 +25,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        /**
+         * 获取屏幕的宽度
+         */
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         GlobalParams.WD_WIDTH = metrics.widthPixels;

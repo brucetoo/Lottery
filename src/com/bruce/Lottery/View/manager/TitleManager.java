@@ -67,7 +67,8 @@ public class TitleManager implements Observer{
             @Override
             public void onClick(View v) {
                // System.out.println("返回键");
-                Toast.makeText(activity.getApplicationContext(),"返回",Toast.LENGTH_LONG).show();
+              // Toast.makeText(activity.getApplicationContext(),"返回",Toast.LENGTH_LONG).show();
+                MiddleManager.getInstance().goBack();
             }
         });
         help.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +151,9 @@ public class TitleManager implements Observer{
                     instance.showCommonContainer();
                     break;
                 case ConstantValue.VIEW_SSQ:
+                    instance.showCommonContainer();
+                    break;
+                case ConstantValue.VIEW_SHOPPING:
                     instance.showCommonContainer();
                     break;
             }

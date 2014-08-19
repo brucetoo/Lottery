@@ -24,10 +24,7 @@ public class MiddleManager extends Observable{
     //单例模式！在 find id的时候就实例化
     private static MiddleManager instance = new MiddleManager();
 
-    private MiddleManager() {
-    }
-
-    ;
+    private MiddleManager() {};
 
     public static MiddleManager getInstance() {
         return instance;
@@ -110,6 +107,15 @@ public class MiddleManager extends Observable{
         changeTitleAndBottom();
 
     }
+
+    /**
+     * 对外抛出方法，使外面能获取到当前显示的UI
+     * @return
+     */
+    public BaseUI getCurrentUI() {
+        return currentUI;
+    }
+
     /**
      * 切换界面
      * 中间容器中，每次切换没有判断当前正在展示和需要切换的目标是不是同一个
@@ -194,8 +200,11 @@ public class MiddleManager extends Observable{
                 //得到移除后的第一个
                 String key = history.getFirst();
                 BaseUI targetUI = uiCache.get(key);
+
+                targetUI.onPause();
                 br_middle.removeAllViews();
                 br_middle.addView(targetUI.getChild());
+                targetUI.onResume();
 
                 currentUI = targetUI; //将正在显示的UI 改变
                 changeTitleAndBottom();

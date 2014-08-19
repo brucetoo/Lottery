@@ -328,6 +328,7 @@ public class Hall extends BaseUI {
             holder.logo.setImageResource(logoResIds[position]);
             holder.title.setText(titleResIds[position]);
 
+            //设置局部更新的地方，position代表唯一标示
             holder.summary.setTag(position);
 
             holder.bet.setOnClickListener(new View.OnClickListener() {

@@ -3,6 +3,7 @@ package com.bruce.Lottery.View;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
@@ -17,7 +18,16 @@ import com.bruce.Lottery.View.manager.BottomManager;
 import com.bruce.Lottery.View.manager.MiddleManager;
 import com.bruce.Lottery.View.manager.TitleManager;
 import com.bruce.Lottery.adapter.PoolAdapter;
+import com.bruce.Lottery.bean.Oelement;
+import com.bruce.Lottery.bean.ShoppingCart;
+import com.bruce.Lottery.bean.Ticket;
+import com.bruce.Lottery.engine.CommonInfoEngine;
+import com.bruce.Lottery.net.protocol.Message;
+import com.bruce.Lottery.net.protocol.element.CurrentIssueElement;
+import com.bruce.Lottery.utils.BeanFactory;
+import com.bruce.Lottery.utils.PromptManager;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -111,6 +121,7 @@ public class playSSQ extends BaseUI {
     @Override
     public void onResume() {
         super.onResume();
+        clear();
         //注册传感器，传感器很耗时，所以在退出该页面时 onPause需要注销掉
         listener = new shakeListener(context) {
             @Override
@@ -148,6 +159,7 @@ public class playSSQ extends BaseUI {
     public void onPause() {
         super.onPause();
         //注销传感器
+        listener = null;
         manager.unregisterListener(listener);
     }
 
@@ -255,5 +267,116 @@ public class playSSQ extends BaseUI {
             return 1;
         }
         return 0;
+    }
+
+    /**
+     * 清空选择
+     */
+    public void clear() {
+        redNum.clear();
+        blueNum.clear();
+
+        //改变双色球个数后 需调用
+        changeNotice();
+
+        blueAdapter.notifyDataSetChanged();
+        redAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 选好了
+     */
+    public void done() {
+        // ①判断：用户是否选择了一注投注
+        if (redNum.size() >= 6 && blueNum.size() >= 1) {
+            //获取当前销售期信息，有就用
+           // if (bundle != null) {
+                // ③封装用户的投注信息：红球、蓝球、注数
+                Ticket ticket = new Ticket();
+                DecimalFormat decimalFormat = new DecimalFormat("00");
+                StringBuffer redBuffer = new StringBuffer();
+                for (Integer item : redNum) {
+                    redBuffer.append(" ").append(decimalFormat.format(item));
+                }
+                ticket.setRedNum(redBuffer.substring(1));
+
+                StringBuffer blueBuffer = new StringBuffer();
+                for (Integer item : blueNum) {
+                    blueBuffer.append(" ").append(decimalFormat.format(item));
+                }
+
+                ticket.setBlueNum(blueBuffer.substring(1));
+
+                ticket.setNum(calc());
+
+                // ④创建彩票购物车，将投注信息添加到购物车中
+                ShoppingCart.getInstance().getTickets().add(ticket);
+
+                // ⑤设置彩种的标示，设置彩种期次
+               if(bundle!=null) {
+                   ShoppingCart.getInstance().setIssue(bundle.getString("issue"));
+               }else{
+                   ShoppingCart.getInstance().setIssue("双色球期数");
+               }
+                ShoppingCart.getInstance().setLotteryid(ConstantValue.SSQ);
+
+                //跳转到购物车
+                MiddleManager.getInstance().changeUI(Shopping.class,bundle);
+           // } else {//没有就重新获取
+                //防止断网出现的问题
+               // getCurrentIssueInfo();
+            //}
+
+        } else {
+            // 提示：需要选择一注
+            PromptManager.showToast(context, "需要选择一注");
+        }
+    }
+
+    /**
+     * 获取双色球当前销售期信息
+     */
+    private void getCurrentIssueInfo() {
+        /**
+         * 在执行 doInBackground之前就要确定是否有网络，一般情况 Thread.start（）方法是可重新的
+         * 但是 excute方法不可重新，所以就仿照excute的方法，设置了个execueProxy的方法，提前就判断是否有网
+         */
+        new MyHttpTask<Integer>() {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                PromptManager.showProgressDialog(context);
+            }
+
+            @Override
+            protected Message doInBackground(Integer... params) {
+                //后台统一获取 业务的调用
+                CommonInfoEngine engine = BeanFactory.getImpl(CommonInfoEngine.class);
+                return engine.getCurrentIssueInfo(params[0]);
+            }
+
+            @Override
+            protected void onPostExecute(Message message) {
+                super.onPostExecute(message);
+                PromptManager.closeProgressDialog();
+                if (message != null) {
+                    Oelement oelement = message.getBody().getOelement();
+                    //服务器返回成功
+                    if (oelement.getErrorode().equals("0")) {
+                        //notifyChanged(message.getBody().getElements().get(0));
+                        //创建bundle，获取到信息
+                        CurrentIssueElement element = (CurrentIssueElement) message.getBody().getElements().get(0);
+                        bundle = new Bundle();
+                        bundle.putString("issue", element.getIssue());
+                    } else {
+                        PromptManager.showErrorDialog(context, oelement.getErrormsg());
+                    }
+                } else {
+                    PromptManager.showErrorDialog(context, "服务器忙,稍后再试....");
+                }
+
+            }
+        }.executeProxy(ConstantValue.SSQ);
+
     }
 }

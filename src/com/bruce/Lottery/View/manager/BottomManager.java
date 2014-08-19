@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bruce.Lottery.ConstantValue;
 import com.bruce.Lottery.R;
+import com.bruce.Lottery.View.playSSQ;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Observable;
@@ -85,7 +86,16 @@ public class BottomManager implements Observer{
 			public void onClick(View v) {
 				Log.i(TAG, "点击清空按钮");
 				// 获取到当前正在展示的界面
-
+              BaseUI baseUI =  MiddleManager.getInstance().getCurrentUI();
+                /**
+                 * 如果彩票种类过多时，需要写很多if语句，冗余，
+                 * 可以定义一个interface PlayGame
+                 * 里面有clear 和 done(选好了)方法，让不同玩法的彩票
+                 * 去实现该接口。
+                 */
+              if(baseUI instanceof playSSQ){
+                  ((playSSQ) baseUI).clear();
+              }
 
 			}
 		});
@@ -93,7 +103,10 @@ public class BottomManager implements Observer{
 		addButton.setOnClickListener(new OnClickListener() {
 
 			public void onClick(View v) {
-
+                BaseUI baseUI =  MiddleManager.getInstance().getCurrentUI();
+                if(baseUI instanceof playSSQ){
+                    ((playSSQ) baseUI).done();
+                }
 			}
 		});
 	}
@@ -153,6 +166,9 @@ public class BottomManager implements Observer{
                     break;
                 case ConstantValue.VIEW_SSQ:
                     instrance.showGameBottom();
+                    break;
+                case ConstantValue.VIEW_SHOPPING:
+                    instrance.changeBottomVisiblity(View.GONE);
                     break;
             }
         }

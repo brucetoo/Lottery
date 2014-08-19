@@ -30,7 +30,7 @@ public class NetUtil {
         //Mobile连接成功后，判断是哪个APN被选中
         if(isMobile){
             //APN被选中的代理是否有内容，如果有是 wap方式
-            readAPN(context);
+           // readAPN(context);
         }
 
         if (!isWIFI && !isMobile){

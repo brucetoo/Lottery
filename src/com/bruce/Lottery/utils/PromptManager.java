@@ -2,11 +2,11 @@ package com.bruce.Lottery.utils;
 
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.widget.Button;
 import android.widget.Toast;
 import com.bruce.Lottery.R;
 
@@ -47,15 +47,32 @@ public class PromptManager {
 				.setTitle(R.string.app_name)//
 				.setMessage("当前无网络").setPositiveButton("设置", new OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// 跳转到系统的网络设置界面
-						Intent intent = new Intent();
-						intent.setClassName("com.android.settings", "com.android.settings.WirelessSettings");
-						context.startActivity(intent);
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 跳转到系统的网络设置界面
+                Intent intent = null;
+                try {
+                    String sdkVersion = android.os.Build.VERSION.SDK;
+                    //根据SDK 版本来确定 intent
+                    if (Integer.valueOf(sdkVersion) > 10) {
+                        intent = new Intent(
+                                android.provider.Settings.ACTION_WIRELESS_SETTINGS);
+                    } else {
+                        intent = new Intent();
+                        ComponentName comp = new ComponentName(
+                                "com.android.settings",
+                                "com.android.settings.WirelessSettings");
+                        intent.setComponent(comp);
+                        intent.setAction("android.intent.action.VIEW");
+                    }
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                context.startActivity(intent);
 
-					}
-				}).setNegativeButton("知道了", null).show();
+            }
+        }).setNegativeButton("知道了", null).show();
 	}
 
 	/**

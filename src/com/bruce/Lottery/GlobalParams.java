@@ -20,4 +20,12 @@ public class GlobalParams {
      * 屏幕宽度
      */
     public static  int WD_WIDTH = 0;
+    /**
+     * 是否登录
+     */
+    public static boolean isLogin = false;
+    /**
+     * 用户余额
+     */
+    public static float MONEY = 0;
 }

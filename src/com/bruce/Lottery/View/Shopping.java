@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 import com.bruce.Lottery.ConstantValue;
+import com.bruce.Lottery.GlobalParams;
 import com.bruce.Lottery.R;
 import com.bruce.Lottery.View.manager.BaseUI;
 import com.bruce.Lottery.View.manager.MiddleManager;
 import com.bruce.Lottery.bean.ShoppingCart;
 import com.bruce.Lottery.bean.Ticket;
+import com.bruce.Lottery.utils.PromptManager;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.DecimalFormat;
@@ -86,7 +88,26 @@ public class Shopping extends BaseUI {
                 noticeChange();
                 break;
             case R.id.ii_lottery_shopping_buy://购买
-
+                //1.判断是否投注
+                if(ShoppingCart.getInstance().getTickets().size()>=1){
+                    //2.判断是否登录
+                    if(GlobalParams.isLogin){
+                         //3.判断余额是否够
+                        if(ShoppingCart.getInstance().getTickets().size()>GlobalParams.MONEY){
+                            MiddleManager.getInstance().changeUI(PreBet.class,bundle);
+                        }else {
+                            //3.提示用户充值
+                            PromptManager.showToast(context,"充值去");
+                        }
+                    }else{
+                        //2.提示用户登录
+                        PromptManager.showToast(context,"登录去");
+                        MiddleManager.getInstance().changeUI(Login.class,bundle);
+                    }
+                }else{
+                    //1.提示用户选择
+                    PromptManager.showToast(context,"至少选择一注！");
+                }
                 break;
         }
     }

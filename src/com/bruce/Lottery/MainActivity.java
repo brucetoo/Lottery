@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
         String title = activity.getResources().getString(R.string.app_name);
         // 将应用的图标设置为Parceable类型
         Parcelable icon = Intent.ShortcutIconResource.fromContext(
-                activity, R.drawable.icon);
+                activity, R.drawable.ic_launcher);
         // 点击图标之后的意图操作
         Intent myIntent = new Intent(activity, MainActivity.class);
         // 设置快捷方式的名称

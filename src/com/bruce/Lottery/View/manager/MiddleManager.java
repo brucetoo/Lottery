@@ -4,8 +4,11 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
-import com.bruce.Lottery.View.playSSQ;
+import com.bruce.Lottery.View.Hall;
 import com.bruce.Lottery.utils.AnimationController;
+import com.bruce.Lottery.utils.MemoryManager;
+import com.bruce.Lottery.utils.PromptManager;
+import com.bruce.Lottery.utils.SoftMap;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
@@ -41,7 +44,17 @@ public class MiddleManager extends Observable{
     /**
      * 存放UI界面，String UI类名  BaseUI UI类型
      */
-    private Map<String, BaseUI> uiCache = new HashMap<String, BaseUI>();//存放创建的ＵＩ界面
+    private static Map<String, BaseUI> uiCache;//= new HashMap<String, BaseUI>();//存放创建的ＵＩ界面
+
+    static{
+        //内存充足就用HashMap 不充足就用SoftMap
+        if(MemoryManager.hasAcailMemory()){
+            uiCache = new HashMap<String, BaseUI>();
+        }else{
+            uiCache = new SoftMap<String, BaseUI>();
+        }
+
+    }
 
     private BaseUI currentUI; //当前显示的UI
 
@@ -201,13 +214,20 @@ public class MiddleManager extends Observable{
                 String key = history.getFirst();
                 BaseUI targetUI = uiCache.get(key);
 
-                targetUI.onPause();
-                br_middle.removeAllViews();
-                br_middle.addView(targetUI.getChild());
-                targetUI.onResume();
+                //因为用了软引用，uiCache中前面的界面可能被ＧＣ
+                if(targetUI != null) {
+                    targetUI.onPause();
+                    br_middle.removeAllViews();
+                    br_middle.addView(targetUI.getChild());
+                    targetUI.onResume();
 
-                currentUI = targetUI; //将正在显示的UI 改变
-                changeTitleAndBottom();
+                    currentUI = targetUI; //将正在显示的UI 改变
+                    changeTitleAndBottom();
+                }else{
+                    //界面被回收以后,可跳转到一个不需要传递数据的view中
+                    changeUI(Hall.class);
+                    PromptManager.showToast(getContext(),"应用崩溃，自动跳到大厅页");
+                }
                 return true;
             }
         }
@@ -267,4 +287,8 @@ public class MiddleManager extends Observable{
     private LinkedList<String> history = new LinkedList<String>();//用户界面操作的记录
 
 
+    public void clear() {
+
+        history.clear();
+    }
 }

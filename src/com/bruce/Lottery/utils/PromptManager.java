@@ -23,7 +23,7 @@ public class PromptManager {
      */
 	public static void showProgressDialog(Context context) {
 		dialog = new ProgressDialog(context);
-		dialog.setIcon(R.drawable.icon);
+		dialog.setIcon(R.drawable.ic_launcher);
 		dialog.setTitle(R.string.app_name);
 
 		dialog.setMessage("请等候，数据加载中……");
@@ -43,7 +43,7 @@ public class PromptManager {
 	 */
 	public static void showNoNetWork(final Context context) {
 		Builder builder = new Builder(context);
-		builder.setIcon(R.drawable.icon)//
+		builder.setIcon(R.drawable.ic_launcher)//
 				.setTitle(R.string.app_name)//
 				.setMessage("当前无网络").setPositiveButton("设置", new OnClickListener() {
 
@@ -82,7 +82,7 @@ public class PromptManager {
 	 */
 	public static void showExitSystem(Context context) {
 		Builder builder = new Builder(context);
-		builder.setIcon(R.drawable.icon)//
+		builder.setIcon(R.drawable.ic_launcher)//
 				.setTitle(R.string.app_name)//
 				.setMessage("是否退出应用").setPositiveButton("确定", new OnClickListener() {
 
@@ -107,7 +107,7 @@ public class PromptManager {
 	 */
 	public static void showErrorDialog(Context context, String msg) {
 		new Builder(context)//
-				.setIcon(R.drawable.icon)//
+				.setIcon(R.drawable.ic_launcher)//
 				.setTitle(R.string.app_name)//
 				.setMessage(msg)//
 				.setNegativeButton(context.getString(R.string.is_positive), null)//

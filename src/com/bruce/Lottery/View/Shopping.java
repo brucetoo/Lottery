@@ -93,7 +93,7 @@ public class Shopping extends BaseUI {
                     //2.判断是否登录
                     if(GlobalParams.isLogin){
                          //3.判断余额是否够
-                        if(ShoppingCart.getInstance().getTickets().size()>GlobalParams.MONEY){
+                        if(ShoppingCart.getInstance().getLotteryvalue()<GlobalParams.MONEY){
                             MiddleManager.getInstance().changeUI(PreBet.class,bundle);
                         }else {
                             //3.提示用户充值

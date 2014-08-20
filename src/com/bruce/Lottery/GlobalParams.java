@@ -28,4 +28,8 @@ public class GlobalParams {
      * 用户余额
      */
     public static float MONEY = 0;
+    /**
+     * 登陆用户名
+     */
+    public static String USERNAME ="";
 }

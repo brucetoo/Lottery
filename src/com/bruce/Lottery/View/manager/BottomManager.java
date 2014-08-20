@@ -161,6 +161,9 @@ public class BottomManager implements Observer{
                 case ConstantValue.VIEW_HALL:
                     instrance.showCommonBottom();
                     break;
+                case ConstantValue.VIEW_LOGIN:
+                    instrance.showCommonBottom();
+                    break;
                 case ConstantValue.SECOND_VIEW:
                     instrance.showGameBottom();
                     break;

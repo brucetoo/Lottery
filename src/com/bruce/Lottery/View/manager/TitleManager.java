@@ -7,8 +7,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.bruce.Lottery.ConstantValue;
+import com.bruce.Lottery.GlobalParams;
 import com.bruce.Lottery.R;
-import com.bruce.Lottery.View.SecondUI;
+import com.bruce.Lottery.View.Login;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Observable;
@@ -85,7 +86,7 @@ public class TitleManager implements Observer{
             public void onClick(View v) {
                 //点击的时候不能重复的去创建新的UI,因此用字节码的形式
               //  MiddleManager.getInstance().changeUI(new SecondUI(activity.getApplicationContext()));
-                MiddleManager.getInstance().changeUI(SecondUI.class);
+                MiddleManager.getInstance().changeUI(Login.class);
             }
         });
     }
@@ -145,14 +146,17 @@ public class TitleManager implements Observer{
         if(data!=null && StringUtils.isNumeric(data.toString())){
             switch (Integer.valueOf(data.toString())){
                 case ConstantValue.VIEW_HALL:
-                    instance.showUnLoginContainer();
+                    if(!GlobalParams.isLogin){
+                        instance.showUnLoginContainer();
+                    }else{
+                        showLoginTitle();
+                        String info = "用户名：" + GlobalParams.USERNAME + "\r\n" + "余额:" + GlobalParams.MONEY;
+                        userInfo.setText(info);
+                    }
                     break;
+                case ConstantValue.VIEW_LOGIN:
                 case ConstantValue.SECOND_VIEW:
-                    instance.showCommonContainer();
-                    break;
                 case ConstantValue.VIEW_SSQ:
-                    instance.showCommonContainer();
-                    break;
                 case ConstantValue.VIEW_SHOPPING:
                     instance.showCommonContainer();
                     break;

@@ -1,5 +1,7 @@
 package com.bruce.Lottery.bean;
 
+import com.bruce.Lottery.GlobalParams;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +12,12 @@ import java.util.List;
  */
 public class ShoppingCart {
     private static ShoppingCart instance = new ShoppingCart();
-    private ShoppingCart(){}
-    public static ShoppingCart getInstance(){
-        return  instance;
+
+    private ShoppingCart() {
+    }
+
+    public static ShoppingCart getInstance() {
+        return instance;
     }
 
     // 投注
@@ -32,6 +37,27 @@ public class ShoppingCart {
     private List<Ticket> tickets = new ArrayList<Ticket>();//投注信息
     private Integer lotterynumber;
     private Integer lotteryvalue;
+
+    //追期和倍投
+    private Integer appnumbers = 1;
+
+    public Integer getIssuesnumbers() {
+        return issuesnumbers;
+    }
+
+    public void setIssuesnumbers(Integer issuesnumbers) {
+        this.issuesnumbers = issuesnumbers;
+    }
+
+    public Integer getAppnumbers() {
+        return appnumbers;
+    }
+
+    public void setAppnumbers(Integer appnumbers) {
+        this.appnumbers = appnumbers;
+    }
+
+    private Integer issuesnumbers = 1;
 
     public String getIssue() {
         return issue;
@@ -68,6 +94,68 @@ public class ShoppingCart {
 
     public Integer getLotteryvalue() {
 
-        return getLotterynumber()*2;
+        return getLotterynumber() * 2 * appnumbers * issuesnumbers;
+    }
+
+    /**
+     * 操作倍数
+     *
+     * @return
+     */
+    public boolean addAppnumber(boolean isAdd) {
+        if (isAdd) {
+            appnumbers++;
+            if (appnumbers > 99) {
+                appnumbers--;
+                return false;
+            }
+
+            if (getLotteryvalue() > GlobalParams.MONEY) {
+                appnumbers--;
+                return false;
+            }
+        } else {
+            appnumbers--;
+            if (appnumbers == 0) {
+                appnumbers++;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 增加追期
+     */
+
+    public boolean addIssuesnumbers(boolean isAdd) {
+        if (isAdd) {
+            issuesnumbers++;
+            if (issuesnumbers > 99) {
+                issuesnumbers--;
+                return false;
+            }
+
+            if (getLotteryvalue() > GlobalParams.MONEY) {
+                issuesnumbers--;
+                return false;
+            }
+        } else {
+            issuesnumbers--;
+            if (issuesnumbers == 0) {
+                issuesnumbers++;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void clear() {
+        tickets.clear();
+        lotterynumber = 0;
+        lotteryvalue = 0;
+
+        appnumbers = 1;
+        issuesnumbers = 1;
     }
 }

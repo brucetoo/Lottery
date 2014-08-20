@@ -2,10 +2,14 @@ package com.bruce.Lottery.engine.impl;
 
 import android.util.Xml;
 import com.bruce.Lottery.ConstantValue;
+import com.bruce.Lottery.bean.ShoppingCart;
+import com.bruce.Lottery.bean.Ticket;
 import com.bruce.Lottery.bean.User;
 import com.bruce.Lottery.engine.BaseEngine;
 import com.bruce.Lottery.engine.UserEngine;
 import com.bruce.Lottery.net.protocol.Message;
+import com.bruce.Lottery.net.protocol.element.BalanceElement;
+import com.bruce.Lottery.net.protocol.element.BetElement;
 import com.bruce.Lottery.net.protocol.element.UserLoginElement;
 import com.bruce.Lottery.utils.DES;
 import com.bruce.Lottery.utils.HttpClientUtil;
@@ -73,6 +77,171 @@ public class UserEngineImpl extends BaseEngine implements UserEngine{
 
         }
         return  null;
+    }
+
+    /**
+     * 余额请求
+     * @param user
+     * @return
+     */
+
+    @Override
+    public Message getBalance(User user) {
+        BalanceElement element = new BalanceElement();
+
+        Message message = new Message();
+        message.getHeader().getUsername().setTagValue(user.getUserName());
+        String xml = message.getXml(element);
+
+        Message result = getResult(xml);
+
+        if (result != null) {
+
+            // 第四步：请求结果的数据处理
+            // body部分的第二次解析，解析的是明文内容
+
+            XmlPullParser parser = Xml.newPullParser();
+            try {
+
+                DES des = new DES();
+                String body = "<body>" + des.authcode(result.getBody().getServieceBodyInsideDESInfo(), "ENCODE", ConstantValue.DES_PASSWORD) + "</body>";
+
+                parser.setInput(new StringReader(body));
+
+                int eventType = parser.getEventType();
+                String name;
+
+                BalanceElement resultElement = null;
+
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    switch (eventType) {
+                        case XmlPullParser.START_TAG:
+                            name = parser.getName();
+                            if ("errorcode".equals(name)) {
+                                result.getBody().getOelement().setErrorode(parser.nextText());
+                            }
+                            if ("errormsg".equals(name)) {
+                                result.getBody().getOelement().setErrormsg(parser.nextText());
+                            }
+
+                            // 正对于当前请求
+                            if ("element".equals(name)) {
+                                resultElement = new BalanceElement();
+                                result.getBody().getElements().add(resultElement);
+                            }
+
+                            if ("investvalues".equals(name)) {
+                                if (resultElement != null) {
+                                    resultElement.setInvestvalues(parser.nextText());
+                                }
+                            }
+
+                            break;
+                    }
+                    eventType = parser.next();
+                }
+
+                return result;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public Message bet(User user) {
+        BetElement element = new BetElement();
+        element.getLotteryid().setTagValue(ShoppingCart.getInstance().getLotteryid().toString());
+
+        // 彩票的业务里面：
+        // ①关于注数的计算
+        // ②关于投注信息封装（用户投注号码）
+
+        // 010203040506|01^01020304050607|01
+
+        StringBuffer codeBuffer = new StringBuffer();
+        for (Ticket item : ShoppingCart.getInstance().getTickets()) {
+            codeBuffer.append("^").append(item.getRedNum().replaceAll(" ", "")).append("|").append(item.getBlueNum().replaceAll(" ", ""));
+        }
+
+        element.getLotterycode().setTagValue(codeBuffer.substring(1));
+
+        element.getIssue().setTagValue(ShoppingCart.getInstance().getIssue());
+        element.getLotteryvalue().setTagValue((ShoppingCart.getInstance().getLotteryvalue() * 100) + "");
+
+        element.getLotterynumber().setTagValue(ShoppingCart.getInstance().getLotterynumber().toString());
+        element.getAppnumbers().setTagValue(ShoppingCart.getInstance().getAppnumbers().toString());
+        element.getIssuesnumbers().setTagValue(ShoppingCart.getInstance().getIssuesnumbers().toString());
+
+        element.getIssueflag().setTagValue(ShoppingCart.getInstance().getIssuesnumbers() > 1 ? "1" : "0");
+
+        Message message = new Message();
+        message.getHeader().getUsername().setTagValue(user.getUserName());
+
+        String xml = message.getXml(element);
+
+        Message result = super.getResult(xml);
+
+        if (result != null) {
+
+            // 第四步：请求结果的数据处理
+            // body部分的第二次解析，解析的是明文内容
+
+            XmlPullParser parser = Xml.newPullParser();
+            try {
+
+                DES des = new DES();
+                String body = "<body>" + des.authcode(result.getBody().getServieceBodyInsideDESInfo(), "ENCODE", ConstantValue.DES_PASSWORD) + "</body>";
+
+                parser.setInput(new StringReader(body));
+
+                int eventType = parser.getEventType();
+                String name;
+
+                BetElement resultElement = null;
+
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    switch (eventType) {
+                        case XmlPullParser.START_TAG:
+                            name = parser.getName();
+                            if ("errorcode".equals(name)) {
+                                result.getBody().getOelement().setErrorode(parser.nextText());
+                            }
+                            if ("errormsg".equals(name)) {
+                                result.getBody().getOelement().setErrormsg(parser.nextText());
+                            }
+
+                            // 正对于当前请求
+                            if ("element".equals(name)) {
+                                resultElement = new BetElement();
+                                result.getBody().getElements().add(resultElement);
+                            }
+
+                            if ("actvalue".equals(name)) {
+                                if (resultElement != null) {
+                                    resultElement.setActvalue(parser.nextText());
+                                }
+                            }
+
+                            break;
+                    }
+                    eventType = parser.next();
+                }
+
+                return result;
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return null;
+
     }
 
     /**

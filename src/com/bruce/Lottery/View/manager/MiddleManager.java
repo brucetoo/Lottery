@@ -46,6 +46,8 @@ public class MiddleManager extends Observable{
      */
     private static Map<String, BaseUI> uiCache;//= new HashMap<String, BaseUI>();//存放创建的ＵＩ界面
 
+    //1.将占用内存的UI添加到袋子（套上软引用）
+    //2.GC回收后，清空对应的袋子
     static{
         //内存充足就用HashMap 不充足就用SoftMap
         if(MemoryManager.hasAcailMemory()){
